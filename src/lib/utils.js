@@ -1,4 +1,4 @@
-export const sort = (arr = [], fieldName = 'name', order = 'asc') => {
+export const sort = (arr = [], fieldName = 'title', order = 'asc') => {
     return arr.sort((a, b) => {
         if(order == 'asc'){
             if(Array.isArray(a[fieldName])){

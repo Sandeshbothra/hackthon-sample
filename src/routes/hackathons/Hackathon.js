@@ -1,31 +1,32 @@
-import React, { useState } from "react";
+import { useEffect, useContext, useRef, useState } from "react";
+import FireDB from "./../../api/firebase";
 import { HACKATHON_SORT_OPTION } from "./../../constant";
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { CommonCard } from "./../../components/app-card/Card";
 import { FormModal } from "./../../components/form-modal/FormModal";
 import { ChallengeForm } from "./../../components/app-forms/ChallengeForm";
-import { Card, Container, Dropdown, Form, Header, Icon, Select } from "semantic-ui-react";
+import { Card, Container, Divider, Dropdown, Form, Header, Icon, Segment, Select } from "semantic-ui-react";
 import { UserContext } from "../../contexts/userContexts";
 import { sort, filterRecords } from "../../lib/utils";
 import './Hackathon.css';
 
 const Hackathons = () => {
     const db = getDatabase();
-    const [challenges, setChallenges] = React.useState([]);
+    const [challenges, setChallenges] = useState([]);
     const [filteredChallenges ,  setFilteredChallenges] = useState([]);
-    const [tags, setTags] = React.useState([]);
-    const [showChallengeForm, setShowForm] = React.useState(false);
-    const [filter, setFilter] = React.useState([]);
-    const [sortBy, setSortBy] = React.useState('');
-    const formRef = React.useRef();
-    const [user] = React.useContext(UserContext)
+    const [tags, setTags] = useState([]);
+    const [showChallengeForm, setShowForm] = useState(false);
+    const [filter, setFilter] = useState([]);
+    const [sortBy, setSortBy] = useState('');
+    const formRef = useRef();
+    const { user } = useContext(UserContext)
 
-    React.useEffect(() => {
+    useEffect(() => {
         fetchChallenges();
         fetchTags();
     },[])
 
-    React.useEffect(() => {
+    useEffect(() => {
         setFilteredChallenges(filterRecords(challenges, 'tags', filter));
     },[challenges, filter])
 
@@ -33,10 +34,10 @@ const Hackathons = () => {
         const [fieldName, order] =  sortBy !== '' ? sortBy.split('-') : [];
         chalngs = sort(chalngs, fieldName, order);
         return chalngs.map((challenge) => {
-            let {id , name, description, upVotes , tags} = challenge;
+            let {id , title, description, upVotes , tags} = challenge;
             return (
                 <CommonCard key={id} 
-                name={name} 
+                title={title} 
                 description={description} 
                 tags={tags.join(',')} 
                 extraContent={getUpVoteBtn(challenge, upVotes)}/>
@@ -87,7 +88,8 @@ const Hackathons = () => {
         onValue(challengeRef, (snapshot) => {
             const data = snapshot.val();
             data && setChallenges(Object.keys(data).map((key) => {
-                return { ...data[key], id:key};
+                let upVotes = data[key].upVotes || [];
+                return { ...data[key], id:key, upVotes};
             }));
         });
     }
@@ -102,31 +104,35 @@ const Hackathons = () => {
 
     return (
         <Container>
-            <Header as='h3' block>
+            <h2>
                 Challenges
-                <button className="right floated ui primary button" style={{marginTop:"-0.5rem"}} onClick={() => setShowForm(true)}>Create Challenge</button>
-            </Header>
- 
-            <div className="ui ten column stackable grid">
-                <div className="six wide column">
-                    <Form.Select
-                        fluid
-                        options={getOptions(tags)}
-                        placeholder="Filter By"
-                        search
-                        searchInput={{ id: 'form-select-control-filter', name:'filter' }}
-                        onChange={selectTag}
-                        value={filter}
-                        multiple>
-                    </Form.Select>
+                <button className="right floated ui primary button"  onClick={() => setShowForm(true)}>Create Challenge</button>
+            </h2>
+            <Divider clearing />
+           
+            
+                <div className="ui ten column stackable grid action-header">
+                    <div className="six wide column">
+                        <Form.Select
+                            fluid
+                            options={getOptions(tags)}
+                            placeholder="Filter By"
+                            search
+                            searchInput={{ id: 'form-select-control-filter', name:'filter' }}
+                            onChange={selectTag}
+                            value={filter}
+                            multiple>
+                        </Form.Select>
+                    </div>
+                    <div className="two wide column right floated">
+                        Sort By {' '} <Dropdown inline options={HACKATHON_SORT_OPTION} value={sortBy} onChange={(e, d) => {setSortBy(d.value)}} />
+                    </div>
                 </div>
-                <div className="two wide column right floated">
-                    Sort By {' '} <Dropdown inline options={HACKATHON_SORT_OPTION} value={sortBy} onChange={(e, d) => {setSortBy(d.value)}} />
+                <div className="ui three column stackable grid">
+                    <Card.Group itemsPerRow={3}> {getSortedCards(filteredChallenges, sortBy)} </Card.Group>
                 </div>
-            </div>
-            <div className="ui three column stackable grid">
-                <Card.Group> {getSortedCards(filteredChallenges, sortBy)} </Card.Group>
-            </div>
+            
+            
             <FormModal id="challengeForm" isActive={showChallengeForm} onClose={()=>setShowForm(false)} onSave={saveChallenge} header="Create Challenge" saveButton="Save">
                 <ChallengeForm ref={formRef} options={tags}></ChallengeForm>
             </FormModal>

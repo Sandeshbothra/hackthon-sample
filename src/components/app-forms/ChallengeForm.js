@@ -1,13 +1,13 @@
-import React from "react";
+import {useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import PropTypes from "prop-types";
 import { Form, Input, Select, TextArea } from "semantic-ui-react";
 
 const INITIAL_FORM_VALUE = {name:'', description:'', tags:[]}
-export const ChallengeForm = React.forwardRef((props, ref) => {
-    const [formValues, setFormValues] = React.useState(INITIAL_FORM_VALUE);
-    const [selectOption, setSelectOptions] = React.useState([]);
+export const ChallengeForm = forwardRef((props, ref) => {
+    const [formValues, setFormValues] = useState(INITIAL_FORM_VALUE);
+    const [selectOption, setSelectOptions] = useState([]);
 
-    React.useImperativeHandle(
+    useImperativeHandle(
         ref,
         () => ({
             getFormValue(){
@@ -16,7 +16,7 @@ export const ChallengeForm = React.forwardRef((props, ref) => {
         })
     )
 
-    React.useEffect(() => {
+    useEffect(() => {
         setSelectOptions(props.options.map((option, index) => {
             return {key:index, text:option, value:option}
         }))
@@ -32,9 +32,9 @@ export const ChallengeForm = React.forwardRef((props, ref) => {
         <Form>
             <Form.Field 
                 control={Input} 
-                name="name" 
-                label="Name" 
-                value={formValues.name} 
+                name="title" 
+                label="Title" 
+                value={formValues.title} 
                 placeholder="Challenge Name"
                 onChange={handleOnChange} />
             <Form.Field 

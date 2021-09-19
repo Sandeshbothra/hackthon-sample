@@ -14,8 +14,12 @@ const setUserSession = (initialValue) => {
 export const UserProvider = (props) => {
     const [user, setUser] = useState(() => {
         return setUserSession()
-
     });
+
+    const signOut = () => {
+        window.sessionStorage.removeItem('user');
+        setUser(null);
+    }
 
     useEffect(()=>{
         if(user){
@@ -24,7 +28,7 @@ export const UserProvider = (props) => {
     },[user]);
 
     return (
-        <UserContext.Provider value={[user, setUser]}>
+        <UserContext.Provider value={{user, setUser, signOut}}>
             {props.children}
         </UserContext.Provider>
     )

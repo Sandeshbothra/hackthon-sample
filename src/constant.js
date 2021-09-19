@@ -12,11 +12,11 @@ export const HACKATHON_SORT_OPTION = [
     {
       key: '3',
       value: 'created_on-dsc',
-      content: 'Date: Newest On',
+      content: 'Created On: Newest',
     },
     {
       key: '4',
       value: 'created_on-asc',
-      content: 'Date: Oldest On',
+      content: 'Created On: Oldest',
     },
   ]

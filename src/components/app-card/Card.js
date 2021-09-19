@@ -6,7 +6,7 @@ export const CommonCard = (props) => {
     return (
         <Card>
             <Card.Content>
-                <Card.Header>{props.name}</Card.Header>
+                <Card.Header>{props.title}</Card.Header>
                 <Card.Meta>{props.tags}</Card.Meta>
                 <Card.Description>
                     {props.description}
@@ -20,14 +20,14 @@ export const CommonCard = (props) => {
 }
 
 CommonCard.propTypes = {
-    name:PropTypes.string,
+    title:PropTypes.string,
     description:PropTypes.string,
     upvote:PropTypes.number,
     tags:PropTypes.string
 }
 
 CommonCard.defaultProps = {
-    name:"Default Title",
+    title:"Default Title",
     description: "Default Description",
     upvote:0
 }

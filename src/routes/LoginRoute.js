@@ -4,18 +4,14 @@ import { Button, Form, Grid, Header } from "semantic-ui-react";
 import { UserContext } from "../contexts/userContexts";
 
 export const LoginRoute = () => {
-    const [userMail, setUserEmail] = React.useState('');
-    const [user, setUser] = React.useContext(UserContext);
+    const [employeeId, setEmployeeId] = React.useState('');
+    const {user, setUser} = React.useContext(UserContext);
     const location = useLocation();
 
     const doUserLogin = () => {
-        if(!validateEmail(userMail)) return;
-        setUser(userMail);
-    }
-
-    const validateEmail = (email) => {
-        const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return emailRegex.test(email);
+        if(employeeId && employeeId !== ''){
+            setUser(employeeId);
+        }
     }
 
     return (
@@ -27,11 +23,10 @@ export const LoginRoute = () => {
             </Header>
             <Form size='large'>
                 <Form.Input 
-                    type="email" 
                     fluid icon='user' 
                     iconPosition='left' 
-                    placeholder='E-mail address' 
-                    onChange={(e) => setUserEmail(e.target.value)} 
+                    placeholder='Employee Id' 
+                    onChange={(e) => setEmployeeId(e.target.value)} 
                 />
                 <Button color='teal' fluid size='large' onClick={doUserLogin}>
                     Login
