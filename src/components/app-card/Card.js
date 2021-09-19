@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Card, CardContent, CardDescription, Icon } from "semantic-ui-react";
+import {Card, Icon } from "semantic-ui-react";
 
 export const CommonCard = (props) => {
     return (
@@ -13,19 +13,20 @@ export const CommonCard = (props) => {
                 </Card.Description>
             </Card.Content>
             <Card.Content extra>
-            <Icon name='thumbs up outline' /> {props.upvote}
+                {props.extraContent}
             </Card.Content>
         </Card>
     )
 }
 
-Card.propTypes = {
+CommonCard.propTypes = {
     name:PropTypes.string,
     description:PropTypes.string,
-    upvote:PropTypes.number
+    upvote:PropTypes.number,
+    tags:PropTypes.string
 }
 
-Card.defaultProps = {
+CommonCard.defaultProps = {
     name:"Default Title",
     description: "Default Description",
     upvote:0

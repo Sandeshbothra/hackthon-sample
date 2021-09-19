@@ -3,16 +3,24 @@ import { Switch, Route } from "react-router-dom";
 import MainLayout from "./components/main-layout/MainLayout";
 import Hackathons from "./routes/hackathons/Hackathon";
 import FireDB from "./api/firebase";
+import { LoginRoute } from "./routes/LoginRoute";
+import { ProtectedRoute } from "./components/app-auth/ProtectedRoute";
+import { UserProvider } from './contexts/userContexts';
 
 const App = () => {
     return (
-        <MainLayout >
-            <Switch>
-                <Route to="/">
-                    <Hackathons />
-                </Route>
-            </Switch>
-        </MainLayout>
+        <UserProvider>
+            <MainLayout >
+                <Switch>
+                    <ProtectedRoute exact={true} path="/" >
+                        <Hackathons />
+                    </ProtectedRoute>
+                    <Route path='/login'>
+                        <LoginRoute />
+                    </Route>
+                </Switch>
+            </MainLayout>
+        </UserProvider>
     )
 }
 
