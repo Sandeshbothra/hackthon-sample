@@ -3,7 +3,7 @@ import './topbar.css';
 import { UserContext } from "../../contexts/userContexts";
 
 const TopBar = () => {
-    const {signOut} = useContext(UserContext);
+    const {user, signOut} = useContext(UserContext);
     return (
         <>
             <div className="ui top fixed menu" style={{backgroundColor:"teal"}}>
@@ -14,9 +14,11 @@ const TopBar = () => {
                         </div>
                     </h2>
                 </div>
-                <div className="item right floated">
-                    <h5 className="ui header" onClick={() => signOut()}>Signout</h5>
-                </div>
+                {user && 
+                    <div className="item right floated">
+                        <h5 className="ui header" onClick={() => signOut()}>Signout</h5>
+                    </div>
+                }
             </div>
             <div className="ui main menu placeholder" ></div>
         </>

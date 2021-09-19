@@ -34,6 +34,6 @@ export const LoginRoute = () => {
             </Form>
             </Grid.Column>
         </Grid>:
-        <Redirect to={location.state.from.pathname}></Redirect>
+        <Redirect to={location.state?.from?.pathname || '/'}></Redirect>
     )
 }

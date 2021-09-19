@@ -5,7 +5,7 @@ import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { CommonCard } from "./../../components/app-card/Card";
 import { FormModal } from "./../../components/form-modal/FormModal";
 import { ChallengeForm } from "./../../components/app-forms/ChallengeForm";
-import { Card, Container, Divider, Dropdown, Form, Header, Icon, Segment, Select } from "semantic-ui-react";
+import { Card, Container, Divider, Dropdown, Form, Icon } from "semantic-ui-react";
 import { UserContext } from "../../contexts/userContexts";
 import { sort, filterRecords } from "../../lib/utils";
 import './Hackathon.css';
@@ -47,7 +47,13 @@ const Hackathons = () => {
 
     const getUpVoteBtn = (challenge, upVotes = []) => {
         let isUserVoted = isUserUpVoted(upVotes);
-        return (<a><Icon name={`thumbs up outline`} className={isUserVoted ? 'upVoted' : ''} onClick={() => {if(isUserVoted) return; upVoteChallenge(challenge, upVotes)}}/> {upVotes.length}</a>)
+        return ( <a href='#' onClick={(e) => e.preventDefault()}>
+                <Icon 
+                    name={`thumbs up outline`} 
+                    className={isUserVoted ? 'upVoted' : ''} 
+                    onClick={() => {if(isUserVoted) return; upVoteChallenge(challenge, upVotes)}}
+                /> {upVotes.length} </a>
+                )
     }
 
     const upVoteChallenge = (challenge, upVotes = []) => {
